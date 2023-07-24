@@ -1,0 +1,39 @@
+Table users {
+  id bigserial [pk] // primary key, auto-increment
+  username varchar(255) [unique, not null]
+  email varchar(255) [unique, not null]
+  hashed_password varchar(255) [not null]
+  password_changed_at timestamptz [not null, default: `0001-01-01 00:00:00`]
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table recipes {
+  id bigserial [pk] // primary key, auto-increment
+  name varchar(255) [unique, not null]
+  preparation_time_in_mins int [not null]
+  difficulty_level int [not null]
+  cuisine_type_id int [ref: > cuisine_types.id, not null]
+  calorie_count_per_serving int [not null]
+  servings_count int [not null]
+  preparation_steps text [not null]
+  user_id int [ref: > users.id, not null] // user who uploaded the recipe
+}
+
+Table ingredients {
+  id bigserial [pk] // primary key, auto-increment
+  name varchar(255) [unique, not null]
+  calorie_count_per_unit int [not null]
+}
+
+Table recipe_ingredients {
+  id bigserial [pk] // primary key, auto-increment
+  recipe_id int [ref: > recipes.id, not null]
+  ingredient_id int [ref: > ingredients.id, not null]
+  quantity float [not null]
+  unit varchar(255) [not null]
+}
+
+Table cuisine_types {
+  id bigserial [pk] // primary key, auto-increment
+  name varchar(255) [unique, not null]
+}
