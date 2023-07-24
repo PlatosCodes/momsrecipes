@@ -12,17 +12,17 @@ import (
 const createRecipe = `-- name: CreateRecipe :one
 INSERT INTO recipes (
     name, preparation_time_in_mins, difficulty_level, 
-    cuisine_type_id, calorie_count_per_serving,
+    cuisine_type, calorie_count_per_serving,
     servings_count, preparation_steps, user_id)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
-RETURNING id, name, preparation_time_in_mins, difficulty_level, cuisine_type_id, calorie_count_per_serving, servings_count, preparation_steps, user_id
+RETURNING id, name, preparation_time_in_mins, difficulty_level, cuisine_type, calorie_count_per_serving, servings_count, preparation_steps, user_id, created_at
 `
 
 type CreateRecipeParams struct {
 	Name                   string `json:"name"`
 	PreparationTimeInMins  int32  `json:"preparation_time_in_mins"`
 	DifficultyLevel        int32  `json:"difficulty_level"`
-	CuisineTypeID          int32  `json:"cuisine_type_id"`
+	CuisineType            string `json:"cuisine_type"`
 	CalorieCountPerServing int32  `json:"calorie_count_per_serving"`
 	ServingsCount          int32  `json:"servings_count"`
 	PreparationSteps       string `json:"preparation_steps"`
@@ -34,7 +34,7 @@ func (q *Queries) CreateRecipe(ctx context.Context, arg CreateRecipeParams) (Rec
 		arg.Name,
 		arg.PreparationTimeInMins,
 		arg.DifficultyLevel,
-		arg.CuisineTypeID,
+		arg.CuisineType,
 		arg.CalorieCountPerServing,
 		arg.ServingsCount,
 		arg.PreparationSteps,
@@ -46,17 +46,18 @@ func (q *Queries) CreateRecipe(ctx context.Context, arg CreateRecipeParams) (Rec
 		&i.Name,
 		&i.PreparationTimeInMins,
 		&i.DifficultyLevel,
-		&i.CuisineTypeID,
+		&i.CuisineType,
 		&i.CalorieCountPerServing,
 		&i.ServingsCount,
 		&i.PreparationSteps,
 		&i.UserID,
+		&i.CreatedAt,
 	)
 	return i, err
 }
 
 const getRecipeByID = `-- name: GetRecipeByID :one
-SELECT id, name, preparation_time_in_mins, difficulty_level, cuisine_type_id, calorie_count_per_serving, servings_count, preparation_steps, user_id FROM recipes 
+SELECT id, name, preparation_time_in_mins, difficulty_level, cuisine_type, calorie_count_per_serving, servings_count, preparation_steps, user_id, created_at FROM recipes 
 WHERE id = $1
 `
 
@@ -68,11 +69,12 @@ func (q *Queries) GetRecipeByID(ctx context.Context, id int64) (Recipe, error) {
 		&i.Name,
 		&i.PreparationTimeInMins,
 		&i.DifficultyLevel,
-		&i.CuisineTypeID,
+		&i.CuisineType,
 		&i.CalorieCountPerServing,
 		&i.ServingsCount,
 		&i.PreparationSteps,
 		&i.UserID,
+		&i.CreatedAt,
 	)
 	return i, err
 }

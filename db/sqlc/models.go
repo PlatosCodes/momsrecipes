@@ -8,11 +8,6 @@ import (
 	"time"
 )
 
-type CuisineType struct {
-	ID   int64  `json:"id"`
-	Name string `json:"name"`
-}
-
 type Ingredient struct {
 	ID                  int64  `json:"id"`
 	Name                string `json:"name"`
@@ -20,15 +15,16 @@ type Ingredient struct {
 }
 
 type Recipe struct {
-	ID                     int64  `json:"id"`
-	Name                   string `json:"name"`
-	PreparationTimeInMins  int32  `json:"preparation_time_in_mins"`
-	DifficultyLevel        int32  `json:"difficulty_level"`
-	CuisineTypeID          int32  `json:"cuisine_type_id"`
-	CalorieCountPerServing int32  `json:"calorie_count_per_serving"`
-	ServingsCount          int32  `json:"servings_count"`
-	PreparationSteps       string `json:"preparation_steps"`
-	UserID                 int32  `json:"user_id"`
+	ID                     int64     `json:"id"`
+	Name                   string    `json:"name"`
+	PreparationTimeInMins  int32     `json:"preparation_time_in_mins"`
+	DifficultyLevel        int32     `json:"difficulty_level"`
+	CuisineType            string    `json:"cuisine_type"`
+	CalorieCountPerServing int32     `json:"calorie_count_per_serving"`
+	ServingsCount          int32     `json:"servings_count"`
+	PreparationSteps       string    `json:"preparation_steps"`
+	UserID                 int32     `json:"user_id"`
+	CreatedAt              time.Time `json:"created_at"`
 }
 
 type RecipeIngredient struct {

@@ -12,11 +12,12 @@ Table recipes {
   name varchar(255) [unique, not null]
   preparation_time_in_mins int [not null]
   difficulty_level int [not null]
-  cuisine_type_id int [ref: > cuisine_types.id, not null]
+  cuisine_type varchar(255) [not null]
   calorie_count_per_serving int [not null]
   servings_count int [not null]
   preparation_steps text [not null]
   user_id int [ref: > users.id, not null] // user who uploaded the recipe
+  created_at timestamptz [not null, default: `now()`]
 }
 
 Table ingredients {
@@ -31,9 +32,4 @@ Table recipe_ingredients {
   ingredient_id int [ref: > ingredients.id, not null]
   quantity float [not null]
   unit varchar(255) [not null]
-}
-
-Table cuisine_types {
-  id bigserial [pk] // primary key, auto-increment
-  name varchar(255) [unique, not null]
 }

@@ -12,11 +12,12 @@ CREATE TABLE "recipes" (
   "name" varchar(255) UNIQUE NOT NULL,
   "preparation_time_in_mins" int NOT NULL,
   "difficulty_level" int NOT NULL,
-  "cuisine_type_id" int NOT NULL,
+  "cuisine_type" varchar(255) NOT NULL,
   "calorie_count_per_serving" int NOT NULL,
   "servings_count" int NOT NULL,
   "preparation_steps" text NOT NULL,
-  "user_id" int NOT NULL
+  "user_id" int NOT NULL,
+  "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "ingredients" (
@@ -32,13 +33,6 @@ CREATE TABLE "recipe_ingredients" (
   "quantity" float NOT NULL,
   "unit" varchar(255) NOT NULL
 );
-
-CREATE TABLE "cuisine_types" (
-  "id" bigserial PRIMARY KEY,
-  "name" varchar(255) UNIQUE NOT NULL
-);
-
-ALTER TABLE "recipes" ADD FOREIGN KEY ("cuisine_type_id") REFERENCES "cuisine_types" ("id");
 
 ALTER TABLE "recipes" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
