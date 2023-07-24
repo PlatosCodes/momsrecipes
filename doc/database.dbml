@@ -16,7 +16,7 @@ Table recipes {
   calorie_count_per_serving int [not null]
   servings_count int [not null]
   preparation_steps text [not null]
-  user_id int [ref: > users.id, not null] // user who uploaded the recipe
+  user_id bigint [ref: > users.id, not null] // user who uploaded the recipe
   created_at timestamptz [not null, default: `now()`]
 }
 

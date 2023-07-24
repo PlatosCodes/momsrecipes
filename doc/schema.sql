@@ -1,6 +1,6 @@
 -- SQL dump generated using DBML (dbml-lang.org)
 -- Database: PostgreSQL
--- Generated at: 2023-07-24T15:11:32.786Z
+-- Generated at: 2023-07-24T15:40:03.698Z
 
 CREATE TABLE "users" (
   "id" bigserial PRIMARY KEY,
@@ -20,7 +20,7 @@ CREATE TABLE "recipes" (
   "calorie_count_per_serving" int NOT NULL,
   "servings_count" int NOT NULL,
   "preparation_steps" text NOT NULL,
-  "user_id" int NOT NULL,
+  "user_id" bigint NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 

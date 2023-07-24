@@ -10,7 +10,8 @@ import (
 )
 
 func createRandomRecipe(t *testing.T) Recipe {
-	arg := randomRecipeParams()
+	user := createRandomUser(t)
+	arg := randomRecipeParams(t, user.ID)
 
 	recipe, err := testQueries.CreateRecipe(context.Background(), arg)
 	require.NoError(t, err)
@@ -52,7 +53,7 @@ func TestGetRecipe(t *testing.T) {
 	require.WithinDuration(t, recipe1.CreatedAt, recipe2.CreatedAt, time.Second)
 }
 
-func randomRecipeParams() CreateRecipeParams {
+func randomRecipeParams(t *testing.T, userID int64) CreateRecipeParams {
 	return CreateRecipeParams{
 		Name:                   util.RandomString(6),
 		PreparationTimeInMins:  util.RandomInt(1, 100),
@@ -61,6 +62,6 @@ func randomRecipeParams() CreateRecipeParams {
 		CalorieCountPerServing: util.RandomInt(200, 1000),
 		ServingsCount:          util.RandomInt(1, 5),
 		PreparationSteps:       util.RandomString(100),
-		UserID:                 1,
+		UserID:                 int32(userID),
 	}
 }

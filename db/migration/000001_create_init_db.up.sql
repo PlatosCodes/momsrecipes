@@ -16,7 +16,7 @@ CREATE TABLE "recipes" (
   "calorie_count_per_serving" int NOT NULL,
   "servings_count" int NOT NULL,
   "preparation_steps" text NOT NULL,
-  "user_id" int NOT NULL,
+  "user_id" bigint NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
