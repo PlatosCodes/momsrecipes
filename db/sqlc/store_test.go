@@ -24,7 +24,7 @@ func TestRegisterTx(t *testing.T) {
 		go func() {
 			result, err := store.RegisterTx(context.Background(), CreateUserParams{
 				Username:       util.RandomString(6),
-				HashedPassword: string(hashedPassword),
+				HashedPassword: hashedPassword,
 				Email:          util.RandomEmail(),
 			})
 
@@ -46,7 +46,7 @@ func TestRegisterTx(t *testing.T) {
 		require.NotEmpty(t, user)
 
 		require.NotZero(t, user.ID)
-		require.Equal(t, string(hashedPassword), user.HashedPassword)
+		require.Equal(t, hashedPassword, user.HashedPassword)
 		require.NotEmpty(t, user.Email)
 		require.NotEmpty(t, user.Username)
 

@@ -17,7 +17,7 @@ RETURNING id, username, email, hashed_password, password_changed_at, created_at
 
 type CreateUserParams struct {
 	Username       string `json:"username"`
-	HashedPassword string `json:"hashed_password"`
+	HashedPassword []byte `json:"hashed_password"`
 	Email          string `json:"email"`
 }
 

@@ -6,6 +6,8 @@ package db
 
 import (
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type Ingredient struct {
@@ -23,7 +25,7 @@ type Recipe struct {
 	CalorieCountPerServing int32     `json:"calorie_count_per_serving"`
 	ServingsCount          int32     `json:"servings_count"`
 	PreparationSteps       string    `json:"preparation_steps"`
-	UserID                 int32     `json:"user_id"`
+	UserID                 int64     `json:"user_id"`
 	CreatedAt              time.Time `json:"created_at"`
 }
 
@@ -35,11 +37,22 @@ type RecipeIngredient struct {
 	Unit         string  `json:"unit"`
 }
 
+type Session struct {
+	ID           uuid.UUID `json:"id"`
+	Username     string    `json:"username"`
+	RefreshToken string    `json:"refresh_token"`
+	UserAgent    string    `json:"user_agent"`
+	ClientIp     string    `json:"client_ip"`
+	IsBlocked    bool      `json:"is_blocked"`
+	ExpiresAt    time.Time `json:"expires_at"`
+	CreatedAt    time.Time `json:"created_at"`
+}
+
 type User struct {
 	ID                int64     `json:"id"`
 	Username          string    `json:"username"`
 	Email             string    `json:"email"`
-	HashedPassword    string    `json:"hashed_password"`
+	HashedPassword    []byte    `json:"hashed_password"`
 	PasswordChangedAt time.Time `json:"password_changed_at"`
 	CreatedAt         time.Time `json:"created_at"`
 }

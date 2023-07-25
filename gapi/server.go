@@ -7,7 +7,6 @@ import (
 	"github.com/PlatosCodes/momsrecipes/pb"
 	"github.com/PlatosCodes/momsrecipes/token"
 	"github.com/PlatosCodes/momsrecipes/util"
-	"github.com/gin-gonic/gin"
 )
 
 // Server serves gRPC requests for our moms recipes service.
@@ -31,8 +30,4 @@ func NewServer(config util.Config, store db.Store) (*Server, error) {
 	}
 
 	return server, nil
-}
-
-func errorResponse(err error) gin.H {
-	return gin.H{"error": err.Error()}
 }

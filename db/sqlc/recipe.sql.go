@@ -26,7 +26,7 @@ type CreateRecipeParams struct {
 	CalorieCountPerServing int32  `json:"calorie_count_per_serving"`
 	ServingsCount          int32  `json:"servings_count"`
 	PreparationSteps       string `json:"preparation_steps"`
-	UserID                 int32  `json:"user_id"`
+	UserID                 int64  `json:"user_id"`
 }
 
 func (q *Queries) CreateRecipe(ctx context.Context, arg CreateRecipeParams) (Recipe, error) {

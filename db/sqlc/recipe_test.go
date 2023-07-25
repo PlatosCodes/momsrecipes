@@ -62,6 +62,6 @@ func randomRecipeParams(t *testing.T, userID int64) CreateRecipeParams {
 		CalorieCountPerServing: util.RandomInt(200, 1000),
 		ServingsCount:          util.RandomInt(1, 5),
 		PreparationSteps:       util.RandomString(100),
-		UserID:                 int32(userID),
+		UserID:                 userID,
 	}
 }

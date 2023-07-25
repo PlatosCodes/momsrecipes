@@ -19,6 +19,7 @@ type Server struct {
 	router     *gin.Engine
 }
 
+// NewServer creates a new HTTP server and sets up routing
 func NewServer(config util.Config, store db.Store) (*Server, error) {
 	tokenMaker, err := token.NewPasetoMaker(config.TokenSymmetricKey)
 	if err != nil {
@@ -40,6 +41,15 @@ func NewServer(config util.Config, store db.Store) (*Server, error) {
 
 func (server *Server) setupRouter() {
 	router := gin.Default()
+
+	router.POST("/users", server.createUser)
+	router.POST("/users/login", server.loginUser)
+	router.POST("/renew_access", server.RenewAccessToken)
+
+	authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
+
+	authRoutes.GET("/users/:id", server.getUser)
+	authRoutes.GET("/users", server.listUser)
 
 	server.router = router
 }
