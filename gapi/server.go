@@ -1,24 +1,24 @@
-package api
+package gapi
 
 import (
 	"fmt"
 
 	db "github.com/PlatosCodes/momsrecipes/db/sqlc"
+	"github.com/PlatosCodes/momsrecipes/pb"
 	"github.com/PlatosCodes/momsrecipes/token"
 	"github.com/PlatosCodes/momsrecipes/util"
 	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
-	"github.com/go-playground/validator/v10"
 )
 
-// Server serves HTTP requests for our moms recipes service.
+// Server serves gRPC requests for our moms recipes service.
 type Server struct {
+	pb.UnimplementedMomsRecipesServer
 	config     util.Config
 	Store      db.Store
 	tokenMaker token.Maker
-	router     *gin.Engine
 }
 
+// NewServer creates a new gRPC server
 func NewServer(config util.Config, store db.Store) (*Server, error) {
 	tokenMaker, err := token.NewPasetoMaker(config.TokenSymmetricKey)
 	if err != nil {
@@ -30,23 +30,7 @@ func NewServer(config util.Config, store db.Store) (*Server, error) {
 		tokenMaker: tokenMaker,
 	}
 
-	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
-		v.RegisterValidation("cuisine_type", validCuisineType)
-	}
-
-	server.setupRouter()
 	return server, nil
-}
-
-func (server *Server) setupRouter() {
-	router := gin.Default()
-
-	server.router = router
-}
-
-// Start runs the HTTP server on a specific address
-func (server *Server) Start(address string) error {
-	return server.router.Run(address)
 }
 
 func errorResponse(err error) gin.H {
