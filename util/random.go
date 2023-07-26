@@ -3,23 +3,27 @@ package util
 import (
 	"fmt"
 	"math/rand"
+	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
 const alphabet = "abcdefghijklmnopqrstuvwxyz"
 
-func init() {
-	rand.Seed(time.Now().UnixNano())
+var randSeed struct {
+	value int64
+	once  sync.Once
 }
 
-// RandomInt generates a random integer between min and max
-func RandomInt(min, max int32) int32 {
-	return min + rand.Int31n(max-min+1)
-}
+var randGenerator *rand.Rand
 
-func RandomInt64(min, max int64) int64 {
-	return min + rand.Int63n(max-min+1)
+func Rand() *rand.Rand {
+	randSeed.once.Do(func() {
+		randSeed.value = time.Now().UnixMicro()
+		randGenerator = rand.New(rand.NewSource(randSeed.value))
+	})
+	return randGenerator
 }
 
 // RandomString generates a random string of length n
@@ -28,7 +32,7 @@ func RandomString(n int) string {
 	k := len(alphabet)
 
 	for i := 0; i < n; i++ {
-		c := alphabet[rand.Intn(k)]
+		c := alphabet[Rand().Intn(k)]
 		sb.WriteByte(c)
 	}
 
@@ -36,7 +40,8 @@ func RandomString(n int) string {
 }
 
 func RandomUsername() string {
-	return RandomString(6)
+	return RandomString(10) + strconv.Itoa(time.Now().Nanosecond())
+
 }
 
 func RandomEmail() string {
@@ -46,13 +51,13 @@ func RandomEmail() string {
 func RandomRecipeRequest() RandomRecipeParams {
 	return RandomRecipeParams{
 		Name:                   RandomString(6),
-		PreparationTimeInMins:  RandomInt(1, 100),
-		DifficultyLevel:        RandomInt(1, 10),
+		PreparationTimeInMins:  Rand().Int31(),
+		DifficultyLevel:        Rand().Int31(),
 		CuisineType:            RandomString(5),
-		CalorieCountPerServing: RandomInt(200, 1000),
-		ServingsCount:          RandomInt(1, 5),
+		CalorieCountPerServing: Rand().Int31(),
+		ServingsCount:          Rand().Int31(),
 		PreparationSteps:       RandomString(100),
-		UserID:                 1,
+		UserID:                 Rand().Int63(),
 	}
 }
 
@@ -64,5 +69,5 @@ type RandomRecipeParams struct {
 	CalorieCountPerServing int32  `json:"calorie_count_per_serving"`
 	ServingsCount          int32  `json:"servings_count"`
 	PreparationSteps       string `json:"preparation_steps"`
-	UserID                 int32  `json:"user_id"`
+	UserID                 int64  `json:"user_id"`
 }

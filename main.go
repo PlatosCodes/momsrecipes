@@ -9,7 +9,6 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/PlatosCodes/momsrecipes/api"
 	db "github.com/PlatosCodes/momsrecipes/db/sqlc"
 	"github.com/PlatosCodes/momsrecipes/gapi"
 	"github.com/PlatosCodes/momsrecipes/pb"
@@ -115,14 +114,14 @@ func runGatewayServer(config util.Config, store db.Store) {
 	}
 }
 
-func runGinServer(config util.Config, store db.Store) {
-	server, err := api.NewServer(config, store)
-	if err != nil {
-		log.Fatal("cannot create server")
-	}
+// func runGinServer(config util.Config, store db.Store) {
+// 	server, err := api.NewServer(config, store)
+// 	if err != nil {
+// 		log.Fatal("cannot create server")
+// 	}
 
-	err = server.Start(config.HTTPServerAddress)
-	if err != nil {
-		log.Fatal("cannot start server:", err)
-	}
-}
+// 	err = server.Start(config.HTTPServerAddress)
+// 	if err != nil {
+// 		log.Fatal("cannot start server:", err)
+// 	}
+// }

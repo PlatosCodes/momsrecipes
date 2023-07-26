@@ -14,7 +14,7 @@ func TestPasetoWMaker(t *testing.T) {
 	maker, err := NewPasetoMaker(util.RandomString(32))
 	require.NoError(t, err)
 
-	userID := util.RandomInt64(1, 1000)
+	userID := util.Rand().Int63()
 	username := util.RandomUsername()
 	duration := time.Minute
 
@@ -41,7 +41,7 @@ func TestExpiredPasetoToken(t *testing.T) {
 	maker, err := NewPasetoMaker(util.RandomString(32))
 	require.NoError(t, err)
 
-	userID := util.RandomInt64(1, 1000)
+	userID := util.Rand().Int63()
 	username := util.RandomUsername()
 	duration := -time.Minute
 
@@ -60,7 +60,7 @@ func TestInvalidPasetoToken(t *testing.T) {
 	maker, err := NewPasetoMaker(util.RandomString(32))
 	require.NoError(t, err)
 
-	userID := util.RandomInt64(1, 1000)
+	userID := util.Rand().Int63()
 	username := ""
 	duration := time.Minute
 
