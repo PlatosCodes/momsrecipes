@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"database/sql"
+	"embed"
+	"io/fs"
 	"log"
 	"net"
 	"net/http"
@@ -16,6 +18,8 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/protobuf/encoding/protojson"
+
+	_ "embed"
 
 	_ "github.com/lib/pq"
 )
@@ -58,6 +62,11 @@ func runGrpcServer(config util.Config, store db.Store) {
 	}
 }
 
+// Embed Swagger docs into content
+//
+//go:embed doc/swagger/*
+var swagger embed.FS
+
 func runGatewayServer(config util.Config, store db.Store) {
 	server, err := gapi.NewServer(config, store)
 	if err != nil {
@@ -85,6 +94,14 @@ func runGatewayServer(config util.Config, store db.Store) {
 
 	mux := http.NewServeMux()
 	mux.Handle("/", grpcMux)
+
+	// Create a sub filesystem that contains the swagger files
+	swaggerFiles, err := fs.Sub(swagger, "doc/swagger")
+	if err != nil {
+		log.Fatalf("cannot create sub filesystem: %s", err)
+	}
+
+	mux.Handle("/swagger/", http.StripPrefix("/swagger/", http.FileServer(http.FS(swaggerFiles))))
 
 	listener, err := net.Listen("tcp", config.HTTPServerAddress)
 	if err != nil {
