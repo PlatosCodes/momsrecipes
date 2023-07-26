@@ -32,9 +32,10 @@ func NewServer(config util.Config, store db.Store) (*Server, error) {
 	}
 
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
-		v.RegisterValidation("cuisine_type", validCuisineType)
-	} else {
-		return nil, fmt.Errorf("error binding cusine type validator: %s", err)
+		err = v.RegisterValidation("cuisine_type", validCuisineType)
+		if err != nil {
+			return nil, fmt.Errorf("cannot bind cuisine type validator: %s", err)
+		}
 	}
 
 	server.setupRouter()
