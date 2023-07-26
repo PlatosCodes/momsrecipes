@@ -44,21 +44,22 @@ func (server *Server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (
 		server.config.RefreshTokenDuration,
 	)
 	if err != nil {
-		return nil, status.Errorf(codes.Unimplemented, "failed to create refresh token")
+		return nil, status.Errorf(codes.Internal, "failed to create refresh token")
 
 	}
 
+	mtdt := server.extractMetadata(ctx)
 	session, err := server.Store.CreateSession(ctx, db.CreateSessionParams{
 		ID:           refreshPayload.ID,
 		Username:     refreshPayload.Username,
 		RefreshToken: refreshToken,
-		UserAgent:    "",
-		ClientIp:     "",
+		UserAgent:    mtdt.UserAgent,
+		ClientIp:     mtdt.ClientIP,
 		IsBlocked:    false,
 		ExpiresAt:    refreshPayload.ExpiresAt.Time,
 	})
 	if err != nil {
-		return nil, status.Errorf(codes.Unimplemented, "failed to create session: %s", err)
+		return nil, status.Errorf(codes.Internal, "failed to create session: %s", err)
 
 	}
 
