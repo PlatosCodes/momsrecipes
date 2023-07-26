@@ -56,11 +56,11 @@ func TestGetRecipe(t *testing.T) {
 func randomRecipeParams(t *testing.T, userID int64) CreateRecipeParams {
 	return CreateRecipeParams{
 		Name:                   util.RandomString(6),
-		PreparationTimeInMins:  util.RandomInt(1, 100),
-		DifficultyLevel:        util.RandomInt(1, 10),
-		CuisineType:            util.RandomString(5),
-		CalorieCountPerServing: util.RandomInt(200, 1000),
-		ServingsCount:          util.RandomInt(1, 5),
+		PreparationTimeInMins:  util.Rand().Int31(),
+		DifficultyLevel:        util.Rand().Int31(),
+		CuisineType:            util.RandomString(6),
+		CalorieCountPerServing: util.Rand().Int31(),
+		ServingsCount:          util.Rand().Int31(),
 		PreparationSteps:       util.RandomString(100),
 		UserID:                 userID,
 	}

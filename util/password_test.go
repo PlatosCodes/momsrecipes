@@ -20,6 +20,7 @@ func TestHashPassword(t *testing.T) {
 
 	wrongPassword := RandomString(6)
 	err = CheckPassword(wrongPassword, hashedPassword1)
+
 	require.EqualError(t, err, bcrypt.ErrMismatchedHashAndPassword.Error())
 
 	hashedPassword2, err := HashPassword(password)
