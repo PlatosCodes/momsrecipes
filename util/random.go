@@ -3,6 +3,7 @@ package util
 import (
 	"fmt"
 	"math/rand"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -39,7 +40,8 @@ func RandomString(n int) string {
 }
 
 func RandomUsername() string {
-	return RandomString(6)
+	return RandomString(10) + strconv.Itoa(time.Now().Nanosecond())
+
 }
 
 func RandomEmail() string {
