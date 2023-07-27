@@ -51,7 +51,7 @@ func (store *SQLStore) execTx(ctx context.Context, fn func(*Queries) error) erro
 // In future will add more params to extend functionality of RegisterTx
 // type RegisterTxParams struct {
 // 	Username       string `json:"username"`
-// 	HashedPassword string `json:"hashed_password"`
+// 	Password string `json:"password"`
 // 	Email          string `json:"email"`
 // **Other fields here**
 // }

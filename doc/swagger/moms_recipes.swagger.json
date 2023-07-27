@@ -96,7 +96,7 @@
         "email": {
           "type": "string"
         },
-        "hashedPassword": {
+        "password": {
           "type": "string"
         }
       }

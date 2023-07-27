@@ -53,9 +53,9 @@ func (server *Server) createUser(ctx *gin.Context) {
 	}
 
 	arg := db.CreateUserParams{
-		Username:       req.Username,
-		HashedPassword: hashedPassword,
-		Email:          req.Email,
+		Username: req.Username,
+		Password: hashedPassword,
+		Email:    req.Email,
 	}
 
 	registerResult, err := server.Store.RegisterTx(ctx, arg)
@@ -197,7 +197,7 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 	}
 
-	err = util.CheckPassword(req.Password, user.HashedPassword)
+	err = util.CheckPassword(req.Password, user.Password)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 	}
