@@ -7,12 +7,18 @@ import (
 	db "github.com/PlatosCodes/momsrecipes/db/sqlc"
 	"github.com/PlatosCodes/momsrecipes/pb"
 	"github.com/PlatosCodes/momsrecipes/util"
+	"github.com/PlatosCodes/momsrecipes/val"
+	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 func (server *Server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (*pb.LoginUserResponse, error) {
+	violations := validateLoginRequest(req)
+	if violations != nil {
+		return nil, invalidArgumentError(violations)
+	}
 
 	user, err := server.Store.GetUserByUsername(ctx, req.Username)
 	if err != nil {
@@ -73,4 +79,15 @@ func (server *Server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (
 	}
 
 	return rsp, nil
+}
+
+func validateLoginRequest(req *pb.LoginUserRequest) (violations []*errdetails.BadRequest_FieldViolation) {
+	if err := val.ValidateUsername(req.GetUsername()); err != nil {
+		violations = append(violations, fieldViolation("username", err))
+	}
+
+	if err := val.ValidatePassword(req.GetPassword()); err != nil {
+		violations = append(violations, fieldViolation("password", err))
+	}
+	return violations
 }
