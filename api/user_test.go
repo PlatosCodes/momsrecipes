@@ -573,6 +573,7 @@ func randomUser(t *testing.T) (user db.User, password string) {
 		Username: util.RandomUsername(),
 		Password: hashedPassword,
 		Email:    util.RandomEmail(),
+
 	}, password
 
 }
