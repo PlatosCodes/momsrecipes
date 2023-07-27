@@ -12,15 +12,15 @@ import (
 )
 
 func (server *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
-	hashedPassword, err := util.HashPassword(req.GetHashedPassword())
+	hashedPassword, err := util.HashPassword(req.GetPassword())
 	if err != nil {
 		return nil, status.Errorf(codes.Unimplemented, "failed to hash password: %s", err)
 	}
 
 	arg := db.CreateUserParams{
-		Username:       req.GetUsername(),
-		HashedPassword: hashedPassword,
-		Email:          req.GetEmail(),
+		Username: req.GetUsername(),
+		Password: hashedPassword,
+		Email:    req.GetEmail(),
 	}
 
 	user, err := server.Store.RegisterTx(ctx, arg)
