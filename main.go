@@ -53,7 +53,7 @@ func runDBMigration(migrationURL string, dbSource string) {
 		log.Fatal("failed to run migrate up:", err)
 	}
 	log.Println("db migrated successfully")
-}å
+}
 
 func runGrpcServer(config util.Config, store db.Store) {
 	server, err := gapi.NewServer(config, store)
