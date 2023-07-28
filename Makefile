@@ -13,7 +13,6 @@ dropdb:
 citext:
 	docker exec -it postgres psql --username=root momsrecipes -c "CREATE EXTENSION IF NOT EXISTS citext;"
 
-
 migrateup:
 	migrate -path db/migration -database "${DB_URL}" -verbose up
 
@@ -60,3 +59,4 @@ evans:
 	evans --host localhost --port 9090 -r repl
 
 .PHONY: postgres createdb dropdb citext migrateup migrateup1 migratedown migratedown1 new_migration db_docs db_schema sqlc test server mock proto evans
+
