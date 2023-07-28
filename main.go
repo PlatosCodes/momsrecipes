@@ -49,11 +49,11 @@ func runDBMigration(migrationURL string, dbSource string) {
 	if err != nil {
 		log.Fatal("cannot create new migrate instance:", err)
 	}
-	if err = migration.Up(); err != nil {
+	if err = migration.Up(); err != nil && err != migrate.ErrNoChange {
 		log.Fatal("failed to run migrate up:", err)
 	}
 	log.Println("db migrated successfully")
-}
+}å
 
 func runGrpcServer(config util.Config, store db.Store) {
 	server, err := gapi.NewServer(config, store)
