@@ -32,12 +32,12 @@ func main() {
 		log.Fatal("cannot load config", err)
 	}
 
-	runDBMigration(config.MigrationURL, config.DBSource)
-
 	conn, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
 		log.Fatal("cannot connect to db:", err)
 	}
+
+	runDBMigration(config.MigrationURL, config.DBSource)
 
 	store := db.NewStore(conn)
 	go runGatewayServer(config, store) //run in a separate routine
