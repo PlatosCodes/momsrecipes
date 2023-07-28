@@ -26,8 +26,6 @@ func TestMain(m *testing.M) {
 		log.Fatal("cannot connect to db:", err)
 	}
 
-	runDBMigration(config.MigrationURL, config.DBSource)
-
 	testQueries = New(testDB)
 
 	os.Exit(m.Run())
