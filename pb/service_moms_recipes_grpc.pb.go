@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	MomsRecipes_CreateUser_FullMethodName = "/pb.MomsRecipes/CreateUser"
 	MomsRecipes_LoginUser_FullMethodName  = "/pb.MomsRecipes/LoginUser"
+	MomsRecipes_UpdateUser_FullMethodName = "/pb.MomsRecipes/UpdateUser"
 )
 
 // MomsRecipesClient is the client API for MomsRecipes service.
@@ -29,6 +30,7 @@ const (
 type MomsRecipesClient interface {
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
 	LoginUser(ctx context.Context, in *LoginUserRequest, opts ...grpc.CallOption) (*LoginUserResponse, error)
+	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UpdateUserResponse, error)
 }
 
 type momsRecipesClient struct {
@@ -57,12 +59,22 @@ func (c *momsRecipesClient) LoginUser(ctx context.Context, in *LoginUserRequest,
 	return out, nil
 }
 
+func (c *momsRecipesClient) UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UpdateUserResponse, error) {
+	out := new(UpdateUserResponse)
+	err := c.cc.Invoke(ctx, MomsRecipes_UpdateUser_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MomsRecipesServer is the server API for MomsRecipes service.
 // All implementations must embed UnimplementedMomsRecipesServer
 // for forward compatibility
 type MomsRecipesServer interface {
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
 	LoginUser(context.Context, *LoginUserRequest) (*LoginUserResponse, error)
+	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error)
 	mustEmbedUnimplementedMomsRecipesServer()
 }
 
@@ -75,6 +87,9 @@ func (UnimplementedMomsRecipesServer) CreateUser(context.Context, *CreateUserReq
 }
 func (UnimplementedMomsRecipesServer) LoginUser(context.Context, *LoginUserRequest) (*LoginUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoginUser not implemented")
+}
+func (UnimplementedMomsRecipesServer) UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateUser not implemented")
 }
 func (UnimplementedMomsRecipesServer) mustEmbedUnimplementedMomsRecipesServer() {}
 
@@ -125,6 +140,24 @@ func _MomsRecipes_LoginUser_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MomsRecipes_UpdateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MomsRecipesServer).UpdateUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MomsRecipes_UpdateUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MomsRecipesServer).UpdateUser(ctx, req.(*UpdateUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MomsRecipes_ServiceDesc is the grpc.ServiceDesc for MomsRecipes service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -139,6 +172,10 @@ var MomsRecipes_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "LoginUser",
 			Handler:    _MomsRecipes_LoginUser_Handler,
+		},
+		{
+			MethodName: "UpdateUser",
+			Handler:    _MomsRecipes_UpdateUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

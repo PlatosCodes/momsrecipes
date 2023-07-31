@@ -97,3 +97,74 @@ func TestDeleteUser(t *testing.T) {
 	require.Empty(t, user2)
 
 }
+
+func TestUpdateUserOnlyEmail(t *testing.T) {
+	user := createRandomUser(t)
+
+	newEmail := util.RandomEmail()
+	updatedUser, err := testQueries.UpdateUser(context.Background(), UpdateUserParams{
+		Username: user.Username,
+		Email: sql.NullString{
+			String: newEmail,
+			Valid:  true,
+		},
+	})
+
+	require.NoError(t, err)
+	require.Equal(t, user.ID, updatedUser.ID)
+	require.Equal(t, user.Username, updatedUser.Username)
+	require.NotEqual(t, user.Email, updatedUser.Email)
+	require.Equal(t, user.Password, updatedUser.Password)
+}
+
+func TestUpdateUserOnlyPassword(t *testing.T) {
+	user := createRandomUser(t)
+
+	newPassword := util.RandomString(6)
+	newHashedPassword, err := util.HashPassword(newPassword)
+	require.NoError(t, err)
+
+	updatedUser, err := testQueries.UpdateUser(context.Background(), UpdateUserParams{
+		Username: user.Username,
+		Password: newHashedPassword,
+	})
+
+	require.NoError(t, err)
+	require.Equal(t, user.ID, updatedUser.ID)
+	require.Equal(t, user.Username, updatedUser.Username)
+	require.Equal(t, user.Email, updatedUser.Email)
+	require.NotEqual(t, user.Password, updatedUser.Password)
+	require.Equal(t, newHashedPassword, updatedUser.Password)
+
+}
+
+func TestUpdateUserAllFields(t *testing.T) {
+	user := createRandomUser(t)
+
+	newEmail := util.RandomEmail()
+
+	newPassword := util.RandomString(6)
+	newHashedPassword, err := util.HashPassword(newPassword)
+	require.NoError(t, err)
+
+	updatedUser, err := testQueries.UpdateUser(context.Background(), UpdateUserParams{
+		Username: user.Username,
+		Password: newHashedPassword,
+		Email: sql.NullString{
+			String: newEmail,
+			Valid:  true,
+		},
+	})
+
+	require.NoError(t, err)
+
+	require.Equal(t, user.ID, updatedUser.ID)
+	require.Equal(t, user.Username, updatedUser.Username)
+
+	require.NotEqual(t, user.Email, updatedUser.Email)
+	require.Equal(t, newEmail, updatedUser.Email)
+
+	require.NotEqual(t, user.Password, updatedUser.Password)
+	require.Equal(t, newHashedPassword, updatedUser.Password)
+
+}
