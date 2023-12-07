@@ -21,6 +21,40 @@
     "application/json"
   ],
   "paths": {
+    "/v1/create_recipe": {
+      "post": {
+        "summary": "Create a recipe",
+        "description": "Use this API to create a recipe",
+        "operationId": "MomsRecipes_CreateRecipe",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbCreateRecipeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pbCreateRecipeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "MomsRecipes"
+        ]
+      }
+    },
     "/v1/create_user": {
       "post": {
         "summary": "Create new user",
@@ -48,6 +82,39 @@
             "schema": {
               "$ref": "#/definitions/pbCreateUserRequest"
             }
+          }
+        ],
+        "tags": [
+          "MomsRecipes"
+        ]
+      }
+    },
+    "/v1/get_recipe/{id}": {
+      "get": {
+        "summary": "Get a recipe by id",
+        "description": "Use this API to get a recipe by its id",
+        "operationId": "MomsRecipes_GetRecipeByID",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbGetRecipeByIDResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
           }
         ],
         "tags": [
@@ -125,6 +192,48 @@
     }
   },
   "definitions": {
+    "pbCreateRecipeRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "preparationTimeInMins": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "difficultyLevel": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "cuisineType": {
+          "type": "string"
+        },
+        "calorieCountPerServing": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "servingsCount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "preparationSteps": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "pbCreateRecipeResponse": {
+      "type": "object",
+      "properties": {
+        "recipe": {
+          "$ref": "#/definitions/pbRecipe"
+        }
+      }
+    },
     "pbCreateUserRequest": {
       "type": "object",
       "properties": {
@@ -144,6 +253,14 @@
       "properties": {
         "user": {
           "$ref": "#/definitions/pbUser"
+        }
+      }
+    },
+    "pbGetRecipeByIDResponse": {
+      "type": "object",
+      "properties": {
+        "recipe": {
+          "$ref": "#/definitions/pbRecipe"
         }
       }
     },
@@ -180,6 +297,48 @@
         },
         "user": {
           "$ref": "#/definitions/pbUser"
+        }
+      }
+    },
+    "pbRecipe": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "preparationTimeInMins": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "difficultyLevel": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "cuisineType": {
+          "type": "string"
+        },
+        "calorieCountPerServing": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "servingsCount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "preparationSteps": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },

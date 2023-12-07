@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package pb;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/PlatosCodes/momsrecipes/pb";
+
+message Recipe {
+    int64 id = 1;
+    string name = 2;
+    int32 preparation_time_in_mins = 3;
+    int32 difficulty_level = 4;
+    string cuisine_type = 5;
+    int32 calorie_count_per_serving = 6;
+    int32 servings_count = 7;
+    string preparation_steps = 8;
+    int64 user_id = 9;
+    google.protobuf.Timestamp created_at = 10;
+  }

@@ -4,7 +4,7 @@ package util
 const (
 	American = "American"
 	Cuban    = "Cuban"
-	Italian  = "Italisn"
+	Italian  = "Italian"
 	Mexican  = "Mexican"
 )
 

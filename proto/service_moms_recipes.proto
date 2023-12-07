@@ -6,6 +6,8 @@ import "google/api/annotations.proto";
 import "rpc_create_user.proto";
 import "rpc_login_user.proto";
 import "rpc_update_user.proto";
+import "rpc_create_recipe.proto";
+import "rpc_get_recipe.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 
@@ -24,6 +26,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service MomsRecipes {
+      // Creates a new user
     rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {
         option (google.api.http) = {    
             post: "/v1/create_user"
@@ -34,6 +37,7 @@ service MomsRecipes {
           summary: "Create new user";
         };
     }
+    // Logs in a user
     rpc LoginUser (LoginUserRequest) returns (LoginUserResponse) {
         option (google.api.http) = {    
             post: "/v1/login_user"
@@ -44,6 +48,7 @@ service MomsRecipes {
           summary: "Login a user";
         };
     }
+    // Updates a user's password
     rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponse) {
       option (google.api.http) = {    
           patch: "/v1/update_user"
@@ -53,6 +58,27 @@ service MomsRecipes {
         description: "Use this API to update a user";
         summary: "Update a user";
       };
-  }
+    }
+    // Creates a new recipe
+    rpc CreateRecipe(CreateRecipeRequest) returns (CreateRecipeResponse) {
+      option (google.api.http) = {    
+        post: "/v1/create_recipe"
+        body: "*"
+      };
+      option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        description: "Use this API to create a recipe";
+        summary: "Create a recipe";
+      };
+    };
+    // Retrieves a recipe by ID
+    rpc GetRecipeByID(GetRecipeByIDRequest) returns (GetRecipeByIDResponse) {
+      option (google.api.http) = {    
+        get: "/v1/get_recipe/{id}";
+      };
+      option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        description: "Use this API to get a recipe by its id";
+        summary: "Get a recipe by id";
+      };
+    };
     
 }

@@ -19,18 +19,27 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	MomsRecipes_CreateUser_FullMethodName = "/pb.MomsRecipes/CreateUser"
-	MomsRecipes_LoginUser_FullMethodName  = "/pb.MomsRecipes/LoginUser"
-	MomsRecipes_UpdateUser_FullMethodName = "/pb.MomsRecipes/UpdateUser"
+	MomsRecipes_CreateUser_FullMethodName    = "/pb.MomsRecipes/CreateUser"
+	MomsRecipes_LoginUser_FullMethodName     = "/pb.MomsRecipes/LoginUser"
+	MomsRecipes_UpdateUser_FullMethodName    = "/pb.MomsRecipes/UpdateUser"
+	MomsRecipes_CreateRecipe_FullMethodName  = "/pb.MomsRecipes/CreateRecipe"
+	MomsRecipes_GetRecipeByID_FullMethodName = "/pb.MomsRecipes/GetRecipeByID"
 )
 
 // MomsRecipesClient is the client API for MomsRecipes service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MomsRecipesClient interface {
+	// Creates a new user
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
+	// Logs in a user
 	LoginUser(ctx context.Context, in *LoginUserRequest, opts ...grpc.CallOption) (*LoginUserResponse, error)
+	// Updates a user's password
 	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UpdateUserResponse, error)
+	// Creates a new recipe
+	CreateRecipe(ctx context.Context, in *CreateRecipeRequest, opts ...grpc.CallOption) (*CreateRecipeResponse, error)
+	// Retrieves a recipe by ID
+	GetRecipeByID(ctx context.Context, in *GetRecipeByIDRequest, opts ...grpc.CallOption) (*GetRecipeByIDResponse, error)
 }
 
 type momsRecipesClient struct {
@@ -68,13 +77,38 @@ func (c *momsRecipesClient) UpdateUser(ctx context.Context, in *UpdateUserReques
 	return out, nil
 }
 
+func (c *momsRecipesClient) CreateRecipe(ctx context.Context, in *CreateRecipeRequest, opts ...grpc.CallOption) (*CreateRecipeResponse, error) {
+	out := new(CreateRecipeResponse)
+	err := c.cc.Invoke(ctx, MomsRecipes_CreateRecipe_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *momsRecipesClient) GetRecipeByID(ctx context.Context, in *GetRecipeByIDRequest, opts ...grpc.CallOption) (*GetRecipeByIDResponse, error) {
+	out := new(GetRecipeByIDResponse)
+	err := c.cc.Invoke(ctx, MomsRecipes_GetRecipeByID_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MomsRecipesServer is the server API for MomsRecipes service.
 // All implementations must embed UnimplementedMomsRecipesServer
 // for forward compatibility
 type MomsRecipesServer interface {
+	// Creates a new user
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
+	// Logs in a user
 	LoginUser(context.Context, *LoginUserRequest) (*LoginUserResponse, error)
+	// Updates a user's password
 	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error)
+	// Creates a new recipe
+	CreateRecipe(context.Context, *CreateRecipeRequest) (*CreateRecipeResponse, error)
+	// Retrieves a recipe by ID
+	GetRecipeByID(context.Context, *GetRecipeByIDRequest) (*GetRecipeByIDResponse, error)
 	mustEmbedUnimplementedMomsRecipesServer()
 }
 
@@ -90,6 +124,12 @@ func (UnimplementedMomsRecipesServer) LoginUser(context.Context, *LoginUserReque
 }
 func (UnimplementedMomsRecipesServer) UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUser not implemented")
+}
+func (UnimplementedMomsRecipesServer) CreateRecipe(context.Context, *CreateRecipeRequest) (*CreateRecipeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateRecipe not implemented")
+}
+func (UnimplementedMomsRecipesServer) GetRecipeByID(context.Context, *GetRecipeByIDRequest) (*GetRecipeByIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRecipeByID not implemented")
 }
 func (UnimplementedMomsRecipesServer) mustEmbedUnimplementedMomsRecipesServer() {}
 
@@ -158,6 +198,42 @@ func _MomsRecipes_UpdateUser_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MomsRecipes_CreateRecipe_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateRecipeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MomsRecipesServer).CreateRecipe(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MomsRecipes_CreateRecipe_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MomsRecipesServer).CreateRecipe(ctx, req.(*CreateRecipeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MomsRecipes_GetRecipeByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRecipeByIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MomsRecipesServer).GetRecipeByID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MomsRecipes_GetRecipeByID_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MomsRecipesServer).GetRecipeByID(ctx, req.(*GetRecipeByIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MomsRecipes_ServiceDesc is the grpc.ServiceDesc for MomsRecipes service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -176,6 +252,14 @@ var MomsRecipes_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateUser",
 			Handler:    _MomsRecipes_UpdateUser_Handler,
+		},
+		{
+			MethodName: "CreateRecipe",
+			Handler:    _MomsRecipes_CreateRecipe_Handler,
+		},
+		{
+			MethodName: "GetRecipeByID",
+			Handler:    _MomsRecipes_GetRecipeByID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -6,19 +6,25 @@ services:
       - POSTGRES_PASSWORD=bluecomet
       - POSTGRES_DB=momsrecipes
     ports:
-      - "5432:5432" #Only for local development, remove this line when deploying to AWS?
+      - "5433:5432" #Only for local development, remove this line when deploying to AWS?
+    networks:
+      - momsrecipes-network
 
   api:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "8081:8080"
       - "9090:9090"
-
     environment:
       - DB_SOURCE=postgresql://root:bluecomet@postgres:5432/momsrecipes?sslmode=disable
+    networks:
+      - momsrecipes-network
     depends_on:
       - postgres
     entrypoint: [ "/app/wait-for.sh", "postgres:5432", "--", "/app/start.sh"] #Here for future, but not needed now that migration moved to main code.
     command: [ "/app/main" ]
+
+networks:
+  momsrecipes-network:

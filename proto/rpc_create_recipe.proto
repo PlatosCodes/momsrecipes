@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package pb;
+
+import "recipe.proto";
+
+option go_package = "github.com/PlatosCodes/momsrecipes/pb";
+
+message CreateRecipeRequest {
+    string name = 1;
+    int32 preparation_time_in_mins = 2;
+    int32 difficulty_level = 3;
+    string cuisine_type = 4;
+    int32 calorie_count_per_serving = 5;
+    int32 servings_count = 6;
+    string preparation_steps = 7;
+    int64 user_id = 8;
+  }
+  
+  message CreateRecipeResponse {
+    Recipe recipe = 1;
+  }
