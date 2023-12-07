@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -19,11 +20,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	MomsRecipes_CreateUser_FullMethodName    = "/pb.MomsRecipes/CreateUser"
-	MomsRecipes_LoginUser_FullMethodName     = "/pb.MomsRecipes/LoginUser"
-	MomsRecipes_UpdateUser_FullMethodName    = "/pb.MomsRecipes/UpdateUser"
-	MomsRecipes_CreateRecipe_FullMethodName  = "/pb.MomsRecipes/CreateRecipe"
-	MomsRecipes_GetRecipeByID_FullMethodName = "/pb.MomsRecipes/GetRecipeByID"
+	MomsRecipes_CreateUser_FullMethodName       = "/pb.MomsRecipes/CreateUser"
+	MomsRecipes_LoginUser_FullMethodName        = "/pb.MomsRecipes/LoginUser"
+	MomsRecipes_UpdateUser_FullMethodName       = "/pb.MomsRecipes/UpdateUser"
+	MomsRecipes_CreateRecipe_FullMethodName     = "/pb.MomsRecipes/CreateRecipe"
+	MomsRecipes_GetRecipeByID_FullMethodName    = "/pb.MomsRecipes/GetRecipeByID"
+	MomsRecipes_DeleteRecipeByID_FullMethodName = "/pb.MomsRecipes/DeleteRecipeByID"
 )
 
 // MomsRecipesClient is the client API for MomsRecipes service.
@@ -40,6 +42,8 @@ type MomsRecipesClient interface {
 	CreateRecipe(ctx context.Context, in *CreateRecipeRequest, opts ...grpc.CallOption) (*CreateRecipeResponse, error)
 	// Retrieves a recipe by ID
 	GetRecipeByID(ctx context.Context, in *GetRecipeByIDRequest, opts ...grpc.CallOption) (*GetRecipeByIDResponse, error)
+	// Deletes a recipe by ID
+	DeleteRecipeByID(ctx context.Context, in *DeleteRecipeByIDRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type momsRecipesClient struct {
@@ -95,6 +99,15 @@ func (c *momsRecipesClient) GetRecipeByID(ctx context.Context, in *GetRecipeByID
 	return out, nil
 }
 
+func (c *momsRecipesClient) DeleteRecipeByID(ctx context.Context, in *DeleteRecipeByIDRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, MomsRecipes_DeleteRecipeByID_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MomsRecipesServer is the server API for MomsRecipes service.
 // All implementations must embed UnimplementedMomsRecipesServer
 // for forward compatibility
@@ -109,6 +122,8 @@ type MomsRecipesServer interface {
 	CreateRecipe(context.Context, *CreateRecipeRequest) (*CreateRecipeResponse, error)
 	// Retrieves a recipe by ID
 	GetRecipeByID(context.Context, *GetRecipeByIDRequest) (*GetRecipeByIDResponse, error)
+	// Deletes a recipe by ID
+	DeleteRecipeByID(context.Context, *DeleteRecipeByIDRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedMomsRecipesServer()
 }
 
@@ -130,6 +145,9 @@ func (UnimplementedMomsRecipesServer) CreateRecipe(context.Context, *CreateRecip
 }
 func (UnimplementedMomsRecipesServer) GetRecipeByID(context.Context, *GetRecipeByIDRequest) (*GetRecipeByIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRecipeByID not implemented")
+}
+func (UnimplementedMomsRecipesServer) DeleteRecipeByID(context.Context, *DeleteRecipeByIDRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteRecipeByID not implemented")
 }
 func (UnimplementedMomsRecipesServer) mustEmbedUnimplementedMomsRecipesServer() {}
 
@@ -234,6 +252,24 @@ func _MomsRecipes_GetRecipeByID_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MomsRecipes_DeleteRecipeByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteRecipeByIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MomsRecipesServer).DeleteRecipeByID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MomsRecipes_DeleteRecipeByID_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MomsRecipesServer).DeleteRecipeByID(ctx, req.(*DeleteRecipeByIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MomsRecipes_ServiceDesc is the grpc.ServiceDesc for MomsRecipes service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -260,6 +296,10 @@ var MomsRecipes_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetRecipeByID",
 			Handler:    _MomsRecipes_GetRecipeByID_Handler,
+		},
+		{
+			MethodName: "DeleteRecipeByID",
+			Handler:    _MomsRecipes_DeleteRecipeByID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

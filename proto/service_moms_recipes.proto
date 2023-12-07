@@ -8,7 +8,10 @@ import "rpc_login_user.proto";
 import "rpc_update_user.proto";
 import "rpc_create_recipe.proto";
 import "rpc_get_recipe.proto";
+import "rpc_delete_recipe.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+import "google/protobuf/empty.proto";
+
 
 
 option go_package = "github.com/PlatosCodes/momsrecipes/pb";
@@ -80,5 +83,14 @@ service MomsRecipes {
         summary: "Get a recipe by id";
       };
     };
-    
+    // Deletes a recipe by ID
+    rpc DeleteRecipeByID(DeleteRecipeByIDRequest) returns (google.protobuf.Empty) {
+      option (google.api.http) = {    
+        delete: "/v1/delete_recipe/{id}";
+      };
+      option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        description: "Use this API to delete a recipe by its id";
+        summary: "Delete a recipe by id";
+      };
+    };
 }

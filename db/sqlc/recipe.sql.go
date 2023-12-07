@@ -56,6 +56,15 @@ func (q *Queries) CreateRecipe(ctx context.Context, arg CreateRecipeParams) (Rec
 	return i, err
 }
 
+const deleteRecipeByID = `-- name: DeleteRecipeByID :exec
+DELETE from recipes WHERE id = $1
+`
+
+func (q *Queries) DeleteRecipeByID(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, deleteRecipeByID, id)
+	return err
+}
+
 const getRecipeByID = `-- name: GetRecipeByID :one
 SELECT id, name, preparation_time_in_mins, difficulty_level, cuisine_type, calorie_count_per_serving, servings_count, preparation_steps, user_id, created_at FROM recipes 
 WHERE id = $1

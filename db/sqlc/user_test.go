@@ -3,7 +3,6 @@ package db
 import (
 	"context"
 	"database/sql"
-	"log"
 	"testing"
 	"time"
 
@@ -110,8 +109,6 @@ func TestUpdateUserOnlyEmail(t *testing.T) {
 			Valid:  true,
 		},
 	})
-	log.Println("User", user)
-	log.Println("UpdatedUser", updatedUser)
 
 	require.NoError(t, err)
 	require.Equal(t, user.ID, updatedUser.ID)

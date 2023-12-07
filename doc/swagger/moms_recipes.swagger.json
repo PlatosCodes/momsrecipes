@@ -89,6 +89,40 @@
         ]
       }
     },
+    "/v1/delete_recipe/{id}": {
+      "delete": {
+        "summary": "Delete a recipe by id",
+        "description": "Use this API to delete a recipe by its id",
+        "operationId": "MomsRecipes_DeleteRecipeByID",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "MomsRecipes"
+        ]
+      }
+    },
     "/v1/get_recipe/{id}": {
       "get": {
         "summary": "Get a recipe by id",

@@ -19,19 +19,16 @@ func (server *Server) CreateRecipe(ctx context.Context, req *pb.CreateRecipeRequ
 	if err != nil {
 		return nil, unauthenticatedError(err)
 	}
-	log.Println("authPayload", authPayload)
 
 	violations := validateCreateRecipeRequest(req)
 	if violations != nil {
 		return nil, invalidArgumentError(violations)
 	}
-	log.Println("req", req)
 
 	// Check if the user ID in the request matches the user ID in the token
 	if authPayload.UserID != req.GetUserId() {
 		return nil, status.Errorf(codes.PermissionDenied, "unauthorized user")
 	}
-	log.Println("authPayload ID", authPayload.ID)
 
 	arg := db.CreateRecipeParams{
 		Name:                   req.GetName(),
@@ -43,7 +40,6 @@ func (server *Server) CreateRecipe(ctx context.Context, req *pb.CreateRecipeRequ
 		PreparationSteps:       req.GetPreparationSteps(),
 		UserID:                 req.GetUserId(),
 	}
-	log.Println("arg", arg)
 
 	recipe, err := server.Store.CreateRecipe(ctx, arg)
 	if err != nil {

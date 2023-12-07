@@ -9,3 +9,6 @@ RETURNING *;
 -- name: GetRecipeByID :one
 SELECT * FROM recipes 
 WHERE id = $1;
+
+-- name: DeleteRecipeByID :exec
+DELETE from recipes WHERE id = $1;
